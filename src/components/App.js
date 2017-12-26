@@ -8,6 +8,21 @@ import '../css/pure-min.css'
 import '../App.css'
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: props.storageValue || ''
+    }
+  }
+
+  handleChange(e) {
+    this.setState({value: e.target.value})
+  }
+
+  handleSave() {
+    this.props.setValue(this.state.value)
+  }
+
   render() {
     return (
       <div className="App">
@@ -23,7 +38,16 @@ class App extends Component {
               <h2>Smart Contract Example</h2>
               <p>If your contracts compiled and migrated successfully, below will show a stored value of 5 (by default).</p>
               <p>Try changing the value stored on <strong>line 59</strong> of App.js.</p>
-              <p>The stored value is: 0</p>
+              <p className="storageValue">The stored value is: {this.props.storageValue}</p>
+              <div className="setValue">
+                  <input
+                    type="text"
+                    onChange={this.handleChange.bind(this)}
+                    placeholder={this.props.storageValue}
+                    value={this.state.value}
+                  />
+                  <button className="btn btn-success pull-right" onClick={this.handleSave.bind(this)}>Save</button>
+              </div>
             </div>
           </div>
         </main>

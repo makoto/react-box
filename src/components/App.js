@@ -2,7 +2,6 @@ import { connect } from 'react-redux'
 import * as actions from '../actions/actions'
 import React, { Component } from 'react'
 import SimpleStorageContract from '../../build/contracts/SimpleStorage.json'
-import getWeb3 from '../utils/getWeb3'
 
 import '../css/oswald.css'
 import '../css/open-sans.css'
@@ -15,6 +14,10 @@ export class App extends Component {
     this.state = {
       value: props.storageValue || ''
     }
+  }
+
+  componentDidMount() {
+    this.props.initializeWeb3()
   }
 
   handleLoad() {
@@ -77,6 +80,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     loadValue: () => {
       dispatch(actions.loadValue())
+    },
+    initializeWeb3: () => {
+      dispatch(actions.initializeWeb3())
     }
   }
 }

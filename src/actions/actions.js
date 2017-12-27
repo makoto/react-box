@@ -1,5 +1,13 @@
 import * as types from './action_types'
+import getWeb3 from '../utils/getWeb3'
 
+function web3Initialized(results) {
+  console.log('web3Initialized', web3Initialized)
+  return {
+    type: types.WEB3_INITIALIZED,
+    payload: results
+  }
+}
 
 function loadValueRequest() {
   return {
@@ -21,36 +29,21 @@ function loadValueFailure(body) {
   }
 }
 
-//     const contract = require('truffle-contract')
-//     const simpleStorage = contract(SimpleStorageContract)
-//     simpleStorage.setProvider(this.state.web3.currentProvider)
-//
-//     // Declaring this for later so we can chain functions on SimpleStorage.
-//     var simpleStorageInstance
-//
-//     // Get accounts.
-//     this.state.web3.eth.getAccounts((error, accounts) => {
-//       simpleStorage.deployed().then((instance) => {
-//         simpleStorageInstance = instance
-//
-//         // Stores a given value, 5 by default.
-//         return simpleStorageInstance.set(5, {from: accounts[0]})
-//       }).then((result) => {
-//         // Get the value from the contract to prove it worked.
-//         return simpleStorageInstance.get.call(accounts[0])
-//       }).then((result) => {
-//         // Update state with the result.
-//         return this.setState({ storageValue: result.c[0] })
-//       })
-//     })
-//   }
-
 function dummyCall(){
   return new Promise(
     function(resolve, reject){
       resolve(1)
     }
   )
+}
+
+export function initializeWeb3() {
+  return dispatch => {
+    return getWeb3()
+      .then(body => {
+        dispatch(web3Initialized(body))
+      })
+  }
 }
 
 export function loadValue() {

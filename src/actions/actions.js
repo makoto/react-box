@@ -67,7 +67,6 @@ export function loadValue() {
 
 export function setValue(value) {
   return dispatch => {
-    debugger
     return simpleStorageInstance.set.sendTransaction(value, {from:account})
       .then(result => dispatch(setValueRequest(result)))
   }

@@ -19,6 +19,13 @@ function loadValueRequest() {
   }
 }
 
+function setValueRequest() {
+  return {
+    type: types.SET_VALUE_REQUEST
+  }
+}
+
+
 function loadValueSuccess(value) {
   return {
     type: types.LOAD_VALUE_SUCCESS,
@@ -58,6 +65,10 @@ export function loadValue() {
   }
 }
 
-export function setValue() {
- // Todo
+export function setValue(value) {
+  return dispatch => {
+    debugger
+    return simpleStorageInstance.set.sendTransaction(value, {from:account})
+      .then(result => dispatch(setValueRequest(result)))
+  }
 }

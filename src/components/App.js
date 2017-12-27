@@ -75,8 +75,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    setValue: () => {
-      dispatch(actions.setValue())
+    setValue: (value) => {
+      dispatch(actions.setValue(value))
     },
     loadValue: () => {
       dispatch(actions.loadValue())

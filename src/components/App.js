@@ -15,6 +15,10 @@ class App extends Component {
     }
   }
 
+  handleLoad() {
+    this.props.loadValue()
+  }
+
   handleChange(e) {
     this.setState({value: e.target.value})
   }
@@ -38,15 +42,19 @@ class App extends Component {
               <h2>Smart Contract Example</h2>
               <p>If your contracts compiled and migrated successfully, below will show a stored value of 5 (by default).</p>
               <p>Try changing the value stored on <strong>line 59</strong> of App.js.</p>
-              <p className="storageValue">The stored value is: {this.props.storageValue}</p>
+              <span className="storageValue">
+                The stored value is: {this.props.storageValue}
+              </span>
+
+              <button className="loadValue" onClick={this.handleLoad.bind(this)}>Load value</button>
               <div className="setValue">
                   <input
                     type="text"
                     onChange={this.handleChange.bind(this)}
-                    placeholder={this.props.storageValue}
+                    placeholder="Set new value"
                     value={this.state.value}
                   />
-                  <button className="btn btn-success pull-right" onClick={this.handleSave.bind(this)}>Save</button>
+                  <button className="btn btn-success pull-right" onClick={this.handleSave.bind(this)}>Send transaction</button>
               </div>
             </div>
           </div>

@@ -8,7 +8,8 @@ configure({ adapter: new Adapter() });
 function setup(num) {
   const props = {
     storageValue: num || 1,
-    setValue: jest.fn()
+    setValue: jest.fn(),
+    loadValue: jest.fn()
   }
 
   const enzymeWrapper = mount(<App {...props} />)
@@ -40,6 +41,14 @@ describe('components', () => {
       const { enzymeWrapper } = setup(initialValue)
       expect(enzymeWrapper.find('.storageValue').text()).toBe(`The stored value is: ${initialValue}`)
       expect(enzymeWrapper.state().value).toBe(initialValue)
+    })
+
+    it('should call loadValue', () => {
+      const newValue = 2
+      const { enzymeWrapper, props } = setup(0)
+      const button = enzymeWrapper.find('.loadValue')
+      button.props().onClick()
+      expect(props.loadValue.mock.calls.length).toBe(1)
     })
 
     it('should call setValue with value on input', () => {

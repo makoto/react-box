@@ -1,3 +1,5 @@
+import { connect } from 'react-redux'
+import * as actions from '../actions/actions'
 import React, { Component } from 'react'
 import SimpleStorageContract from '../../build/contracts/SimpleStorage.json'
 import getWeb3 from '../utils/getWeb3'
@@ -7,7 +9,7 @@ import '../css/open-sans.css'
 import '../css/pure-min.css'
 import '../App.css'
 
-class App extends Component {
+export class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -64,8 +66,22 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state, ownProps) => {
+  return {}
+}
 
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    setValue: () => {
+      dispatch(actions.setValue())
+    },
+    loadValue: () => {
+      dispatch(actions.loadValue())
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 //
 //
 // class App extends Component {

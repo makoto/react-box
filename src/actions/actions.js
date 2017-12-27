@@ -1,8 +1,12 @@
 import * as types from './action_types'
 import getWeb3 from '../utils/getWeb3'
+import SimpleStorageContract from '../../build/contracts/SimpleStorage.json'
+import contract from 'truffle-contract'
+
+const simpleStorage = contract(SimpleStorageContract)
+let simpleStorageInstance = null;
 
 function web3Initialized(results) {
-  console.log('web3Initialized', web3Initialized)
   return {
     type: types.WEB3_INITIALIZED,
     payload: results
@@ -15,33 +19,29 @@ function loadValueRequest() {
   }
 }
 
-function loadValueSuccess(body) {
+function loadValueSuccess(value) {
   return {
     type: types.LOAD_VALUE_SUCCESS,
-    body
+    value
   }
 }
 
-function loadValueFailure(body) {
+function loadValueFailure(error) {
   return {
     type: types.LOAD_VALUE_FAILURE,
-    body
+    error
   }
-}
-
-function dummyCall(){
-  return new Promise(
-    function(resolve, reject){
-      resolve(1)
-    }
-  )
 }
 
 export function initializeWeb3() {
   return dispatch => {
     return getWeb3()
-      .then(body => {
-        dispatch(web3Initialized(body))
+      .then(web3 => {
+        dispatch(web3Initialized())
+        simpleStorage.setProvider(web3.currentProvider)
+        simpleStorage.deployed().then((instance) => {
+          simpleStorageInstance = instance
+        })
       })
   }
 }
@@ -49,8 +49,8 @@ export function initializeWeb3() {
 export function loadValue() {
   return dispatch => {
     dispatch(loadValueRequest())
-    return dummyCall()
-      .then(body => dispatch(loadValueSuccess(body)))
+    return simpleStorageInstance.get.call()
+      .then(result => dispatch(loadValueSuccess(result)))
       .catch(ex => dispatch(loadValueFailure(ex)))
   }
 }

@@ -9,7 +9,8 @@ function setup(num) {
   const props = {
     storageValue: num || 1,
     setValue: jest.fn(),
-    loadValue: jest.fn()
+    loadValue: jest.fn(),
+    initializeWeb3: jest.fn()
   }
 
   const enzymeWrapper = mount(<App {...props} />)

@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
 import * as actions from '../actions/actions'
 import React, { Component } from 'react'
-import SimpleStorageContract from '../../build/contracts/SimpleStorage.json'
 
 import '../css/oswald.css'
 import '../css/open-sans.css'
@@ -10,6 +9,7 @@ import '../App.css'
 
 export class App extends Component {
   constructor(props) {
+    console.log('props', props)
     super(props)
     this.state = {
       value: props.storageValue || ''
@@ -68,9 +68,10 @@ export class App extends Component {
     );
   }
 }
-
 const mapStateToProps = (state, ownProps) => {
-  return {}
+  return {
+    storageValue: state.storageValue && state.storageValue.toNumber()
+  }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

@@ -9,7 +9,6 @@ import '../App.css'
 
 export class App extends Component {
   constructor(props) {
-    console.log('props', props)
     super(props)
     this.state = {
       value: props.storageValue || ''

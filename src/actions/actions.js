@@ -4,7 +4,7 @@ import SimpleStorageContract from '../../build/contracts/SimpleStorage.json'
 import contract from 'truffle-contract'
 
 const simpleStorage = contract(SimpleStorageContract)
-let simpleStorageInstance = null;
+let simpleStorageInstance, account;
 
 function web3Initialized(results) {
   return {
@@ -37,10 +37,13 @@ export function initializeWeb3() {
   return dispatch => {
     return getWeb3()
       .then(web3 => {
-        dispatch(web3Initialized())
         simpleStorage.setProvider(web3.currentProvider)
-        simpleStorage.deployed().then((instance) => {
-          simpleStorageInstance = instance
+        web3.eth.getAccounts((error, accounts) => {
+          account = accounts[0]
+          simpleStorage.deployed().then((instance) => {
+            simpleStorageInstance = instance
+            dispatch(web3Initialized())
+          })
         })
       })
   }

@@ -1,18 +1,19 @@
 const truffleContract = () => {
-  console.log('*** connect mock')
   const contract = {
     set: {
-      sendTransaction: () => {
-        console.log('*** sendTransaction mock')
-        return contract
+      sendTransaction: (value) => {
+        return new Promise(
+          (resolve, reject) => {
+            resolve()
+          }
+        )
       }
     },
     get: {
       call: () => {
-        console.log('*** call mock')
         return new Promise(
           (resolve, reject) => {
-            resolve(truffleContract.__mockResponse)
+            resolve(truffleContract.__mockLoadValue)
           }
         )
       }
@@ -20,7 +21,6 @@ const truffleContract = () => {
   }
   return {
     setProvider: () => {
-      console.log('*** setProvider mock')
     },
     deployed: () => {
       return contract

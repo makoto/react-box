@@ -19,9 +19,10 @@ function loadValueRequest() {
   }
 }
 
-function setValueRequest() {
+function setValueRequest(value) {
   return {
-    type: types.SET_VALUE_REQUEST
+    type: types.SET_VALUE_REQUEST,
+    value
   }
 }
 
@@ -80,6 +81,8 @@ export function loadValue() {
 export function setValue(value) {
   return dispatch => {
     return simpleStorageInstance.set.sendTransaction(value, {from:account})
-      .then(result => dispatch(setValueRequest(result)))
+      .then(() => {
+        dispatch(setValueRequest(value))
+      })
   }
 }

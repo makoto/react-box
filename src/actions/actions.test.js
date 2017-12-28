@@ -8,9 +8,14 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('actions', () => {
+  // This will cause failure if you try to reuse __mockLoadValue across multiple tests
+  // beforeEach(() => {
+  //   connect.__mockLoadValue = null;
+  // })
+
   it('creates FETCH_TODOS_SUCCESS when calling get function', () => {
-    const expectedValue = 10
-    connect.__mockResponse = expectedValue;
+    let expectedValue = 10
+    connect.__mockLoadValue = expectedValue;
     const expectedActions = [
       { type: types.LOAD_VALUE_REQUEST },
       { type: types.LOAD_VALUE_SUCCESS, value:  expectedValue }
@@ -25,17 +30,21 @@ describe('actions', () => {
   })
 
   it('creates SET_VALUE_REQUEST when sending transaction to set function', () => {
+    const expectedValue = 20
     const expectedActions = [
-      { type: types.LOAD_VALUE_REQUEST },
-      { type: types.LOAD_VALUE_SUCCESS, value:  1 }
+      { type: types.SET_VALUE_REQUEST, value: expectedValue},
     ]
     const store = mockStore({ todos: [] })
     actions.setup().then(()=>{
-      expect(1).toBe(2)
-      store.dispatch(actions.setValue(1)).then(() => {
-        expect(1).toBe(3)
-        expect(store.getActions()).toEqual([])
+      store.dispatch(actions.setValue(expectedValue)).then(() => {
+        console.log('Make sure this line is printed...')
+        expect(store.getActions()).toEqual(expectedActions)
       })
     })
   })
 })
+
+// Areas of improvement
+// - How do I assert the fact that call/sendTransaction are called with correct arguments?
+// - How to make sure that certain assertion on callbacks are actually called (rather than being success because the assertion is never called)
+// - connect.__mockLoadValue is currently singleton so tests cannot share the same value (if you do so by resetting at beforeEach, the test will fail)

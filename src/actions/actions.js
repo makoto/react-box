@@ -41,19 +41,23 @@ function loadValueFailure(error) {
 }
 
 export function initializeWeb3() {
-  return dispatch => {
-    return getWeb3()
-      .then(web3 => {
-        simpleStorage.setProvider(web3.currentProvider)
-        web3.eth.getAccounts((error, accounts) => {
-          account = accounts[0]
-          simpleStorage.deployed().then((instance) => {
-            simpleStorageInstance = instance
-            dispatch(web3Initialized())
+  return new Promise(
+    dispatch => {
+      return getWeb3()
+        .then(web3 => {
+          simpleStorage.setProvider(web3.currentProvider)
+          window.web3 = web3
+          web3.eth.getAccounts((error, accounts) => {
+            account = accounts[0]
+            window.account = account
+            simpleStorage.deployed().then((instance) => {
+              simpleStorageInstance = instance
+              dispatch(web3Initialized())
+            })
           })
         })
-      })
-  }
+    }
+  )
 }
 
 export function loadValue() {

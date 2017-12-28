@@ -4,7 +4,7 @@ import SimpleStorageContract from '../../build/contracts/SimpleStorage.json'
 import contract from 'truffle-contract'
 
 const simpleStorage = contract(SimpleStorageContract)
-let simpleStorageInstance, account;
+let simpleStorageInstance, account, web3;
 
 function web3Initialized(results) {
   return {
@@ -40,24 +40,32 @@ function loadValueFailure(error) {
   }
 }
 
+export function setup() {
+  return getWeb3()
+    .then(_web3 => {
+      web3 = _web3
+      simpleStorage.setProvider(web3.currentProvider)
+      window.web3 = web3
+      return simpleStorage.deployed()
+    })
+    .then(_instance => {
+      return simpleStorageInstance = _instance
+      // return web3.eth.getAccounts(accounts)
+    })
+    // .then(_instance => {
+    //   console.log('getAccounts')
+    //   account = accounts[0]
+    //   window.account = account
+    //   return simpleStorage.deployed()
+    // })
+}
+
 export function initializeWeb3() {
-  return new Promise(
-    dispatch => {
-      return getWeb3()
-        .then(web3 => {
-          simpleStorage.setProvider(web3.currentProvider)
-          window.web3 = web3
-          web3.eth.getAccounts((error, accounts) => {
-            account = accounts[0]
-            window.account = account
-            simpleStorage.deployed().then((instance) => {
-              simpleStorageInstance = instance
-              dispatch(web3Initialized())
-            })
-          })
-        })
-    }
-  )
+  dispatch => {
+    setup(() => {
+      dispatch(web3Initialized())
+    })
+  }
 }
 
 export function loadValue() {

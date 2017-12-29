@@ -20,8 +20,7 @@ const truffleContract = () => {
     }
   }
   return {
-    setProvider: () => {
-    },
+    setProvider: () => { },
     deployed: () => {
       return contract
     }

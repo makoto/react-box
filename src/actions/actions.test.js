@@ -23,7 +23,8 @@ describe('actions', () => {
     const store = mockStore({ todos: [] })
     actions.setup().then(()=>{
       store.dispatch(actions.loadValue()).then(() => {
-        console.log('Make sure this line is printed...')
+        // Can we throw exception if the test does not reach here?
+        console.log('1:Make sure this line is printed...')
         expect(store.getActions()).toEqual(expectedActions)
       })
     })
@@ -37,7 +38,8 @@ describe('actions', () => {
     const store = mockStore({ todos: [] })
     actions.setup().then(()=>{
       store.dispatch(actions.setValue(expectedValue)).then(() => {
-        console.log('Make sure this line is printed...')
+        // Can we throw exception if the test does not reach here?
+        console.log('2:Make sure this line is printed...')
         expect(store.getActions()).toEqual(expectedActions)
       })
     })
@@ -48,3 +50,4 @@ describe('actions', () => {
 // - How do I assert the fact that call/sendTransaction are called with correct arguments?
 // - How to make sure that certain assertion on callbacks are actually called (rather than being success because the assertion is never called)
 // - connect.__mockLoadValue is currently singleton so tests cannot share the same value (if you do so by resetting at beforeEach, the test will fail)
+// - Can we prevent mocked function call silently fail?

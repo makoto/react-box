@@ -6,6 +6,14 @@ import contract from 'truffle-contract'
 const simpleStorage = contract(SimpleStorageContract)
 let simpleStorageInstance, account, web3;
 
+function getAccount(){
+  return new Promise(function(resolve, reject){
+    web3.eth.getAccounts((accounts) =>{
+      resolve(accounts[0])
+    })
+  })
+}
+
 function web3Initialized(results) {
   return {
     type: types.WEB3_INITIALIZED,
@@ -50,15 +58,13 @@ export function setup() {
       return simpleStorage.deployed()
     })
     .then(_instance => {
-      return simpleStorageInstance = _instance
-      // return web3.eth.getAccounts(accounts)
+      simpleStorageInstance = _instance
+      return getAccount()
     })
-    // .then(_instance => {
-    //   console.log('getAccounts')
-    //   account = accounts[0]
-    //   window.account = account
-    //   return simpleStorage.deployed()
-    // })
+    .then(_account => {
+      account = _account
+      window.account = account
+    })
 }
 
 export function initializeWeb3() {
